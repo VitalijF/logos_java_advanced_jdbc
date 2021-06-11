@@ -1,6 +1,7 @@
 package service;
 
 import exception.NoSuchBlogException;
+import exception.UserNotFoundException;
 import model.Blog;
 import model.User;
 
@@ -11,7 +12,7 @@ public interface UserService {
 
     void createUser(User user) throws SQLException;
 
-    User getUserById(int id) throws SQLException, NoSuchBlogException;
+    User getUserById(int id) throws SQLException, UserNotFoundException;
 
     List<User> getAllUsers() throws SQLException;
 

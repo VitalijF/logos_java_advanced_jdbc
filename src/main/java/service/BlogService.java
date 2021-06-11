@@ -1,5 +1,6 @@
 package service;
 
+import exception.UserNotFoundException;
 import model.Blog;
 import exception.DuplicateBlogException;
 import exception.NoSuchBlogException;
@@ -13,5 +14,5 @@ public interface BlogService {
 
     Blog getBlogById(int id) throws SQLException, NoSuchBlogException;
 
-    void createBlog(Blog blog) throws SQLException, NoSuchBlogException, DuplicateBlogException;
+    void createBlog(Blog blog) throws SQLException, NoSuchBlogException, DuplicateBlogException, UserNotFoundException;
 }
