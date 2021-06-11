@@ -2,6 +2,7 @@ package service.imp;
 
 import exception.DuplicateBlogException;
 import exception.NoSuchBlogException;
+import exception.UserNotFoundException;
 import jdbc.MySqlConnector;
 import model.Blog;
 import service.BlogService;
@@ -27,8 +28,8 @@ public class MySqlBlogService implements BlogService {
     public List<Blog> getAll() throws SQLException {
         List<Blog> blogs = new ArrayList<>();
 
-        try (Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery("SELECT * FROM web.blogs")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user_db.blogs");
+             ResultSet result = preparedStatement.executeQuery()) {
             while (result.next()) {
                 blogs.add(new Blog(result.getInt("id"), result.getString("name"), result.getInt("user_id")));
             }
@@ -39,7 +40,7 @@ public class MySqlBlogService implements BlogService {
     @Override
     public Blog getBlogById(int id) throws SQLException, NoSuchBlogException {
         ResultSet result = null;
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web.blogs WHERE id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_db.blogs WHERE id = ?")) {
             statement.setInt(1, id);
             result = statement.executeQuery();
             if (result.next()) {
@@ -51,16 +52,21 @@ public class MySqlBlogService implements BlogService {
     }
 
     @Override
-    public void createBlog(Blog blog) throws SQLException, DuplicateBlogException {
+    public void createBlog(Blog blog) throws SQLException, DuplicateBlogException, UserNotFoundException {
         if (isExists(blog.getId())) {
             throw new DuplicateBlogException("Blog with id : " + blog.getId() + " already exists!");
         }
 
         //TODO:
         //Зробити перевірку чи є юзер з ідентифікатором blog.getUserId()
+
+        if (!isUserExists(blog.getUserId())) {
+            throw new UserNotFoundException("You want to create blog for non-existent user");
+        }
+
         System.out.println("Creating blog with id : " + blog.getId());
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO web.blogs (id, name, user_id) VALUES (?, ?, ?)")) {
+                "INSERT INTO user_db.blogs (id, name, user_id) VALUES (?, ?, ?)")) {
             statement.setInt(1, blog.getId());
             statement.setString(2, blog.getName());
             statement.setInt(3, blog.getUserId());
@@ -75,5 +81,21 @@ public class MySqlBlogService implements BlogService {
             flag = blog.getId() == blogId;
         }
         return flag;
+    }
+
+    private boolean isUserExists(int userId) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "select id from user_db.users where id = ?")){
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
