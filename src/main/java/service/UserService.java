@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface UserService {
 
-    void createUser(User user) throws SQLException;
+    void createUser(User user);
 
     User getUserById(int id) throws SQLException, NoSuchBlogException;
 
-    List<User> getAllUsers() throws SQLException;
+    List<User> getAllUsers();
 
 }

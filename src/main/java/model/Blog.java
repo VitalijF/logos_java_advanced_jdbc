@@ -12,5 +12,5 @@ public class Blog {
 
     private int id;
     private String name;
-    private int userId;
+    private User user;
 }
