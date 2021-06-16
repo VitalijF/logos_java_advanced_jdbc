@@ -89,13 +89,10 @@ public class MySqlBlogService implements BlogService {
 
             preparedStatement.setInt(1, userId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return true;
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next();
             }
 
-            return false;
         }
     }
 }

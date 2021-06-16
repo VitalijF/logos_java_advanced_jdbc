@@ -61,25 +61,21 @@ public class MySqlUserService implements UserService {
     //TODO: Implement
     public User getUserById(int id) throws SQLException, UserNotFoundException {
 
-        ResultSet resultSet = null;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "select * from user_db.users where id = ?"
         )){
 
             preparedStatement.setInt(1, id);
 
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return new User(resultSet.getInt(1), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getInt(4));
+            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                if (resultSet.next()) {
+                    return new User(resultSet.getInt(1), resultSet.getString(2),
+                            resultSet.getString(3), resultSet.getInt(4));
+                }
             }
 
             throw new UserNotFoundException("You write wrong user_id");
 
-        } finally {
-            resultSet.close();
         }
     }
 }
