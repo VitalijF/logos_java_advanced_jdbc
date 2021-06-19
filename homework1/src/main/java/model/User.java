@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlogInput {
+public class User {
 
     private int id;
-    private String name;
-    private int userId;
+    private String firstName;
+    private String lastName;
+    private int age;
 }
