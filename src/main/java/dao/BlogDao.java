@@ -17,5 +17,7 @@ import java.util.List;
 public interface BlogDao {
 
     List<Blog> getAll();
+    Blog getBlogById(int id);
+    void createBlog(BlogInput blog);
 
 }
