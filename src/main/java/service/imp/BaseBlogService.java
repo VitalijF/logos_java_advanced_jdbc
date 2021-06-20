@@ -1,7 +1,8 @@
 package service.imp;
 
-import dao.MySqlUserDao;
+import dao.BlogDao;
 import jdbc.MySqlConnector;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import model.Blog;
 import model.BlogInput;
@@ -12,10 +13,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+@AllArgsConstructor
 public class BaseBlogService implements BlogService {
 
     private static Connection connection;
-    private UserService userService = new BaseUserService(new MySqlUserDao());
+    private BlogDao blogDao;
 
     static {
         try {
@@ -29,18 +31,34 @@ public class BaseBlogService implements BlogService {
     @Override
     @SneakyThrows
     public List<Blog> getAll() {
-       return null;
+
+        return blogDao.getAll();
+
     }
 
     @Override
     @SneakyThrows
     public Blog getBlogById(int id) {
-        return null;
+
+        return blogDao.getBlogById(id);
+
     }
 
     @Override
     @SneakyThrows
-    public void createBlog(BlogInput blog) {
+    public void createBlog(BlogInput blogInput) {
+
+        if (blogInput == null) {
+            throw new RuntimeException("Blog is null");
+        }
+
+        Blog blog = blogDao.getBlogById(blogInput.getId());
+
+        if (blog != null) {
+            throw new RuntimeException("Blog already present in DB");
+        }
+
+        blogDao.createBlog(blogInput);
 
     }
 
