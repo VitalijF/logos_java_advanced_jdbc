@@ -27,6 +27,7 @@ public class MySqlUserService implements UserService {
     }
 
     @Override
+    //TODO: Implement
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
 
@@ -44,6 +45,7 @@ public class MySqlUserService implements UserService {
     }
 
     @Override
+    //TODO: Implement
     public User getUserById(int id) throws SQLException, NoSuchUserException {
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web.users WHERE id = ?")) {
             statement.setInt(1, id);

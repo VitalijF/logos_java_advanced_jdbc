@@ -66,6 +66,9 @@ public class MySqlBlogService implements BlogService {
         if (isExistsBlog(blog.getId())) {
             throw new DuplicateBlogException("Blog with id : " + blog.getId() + " already exists!");
         }
+
+        //TODO:
+        //Зробити перевірку чи є юзер з ідентифікатором blog.getUserId()
             if (userService.isExistsUser(blog.getUserId())) {
                 try (PreparedStatement statement = connection.prepareStatement(
                         "INSERT INTO web.blogs (id, name, user_id) VALUES (?, ?, ?)")) {
