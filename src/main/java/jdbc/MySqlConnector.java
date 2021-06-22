@@ -11,7 +11,7 @@ public class MySqlConnector {
             "&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     private static final String USER = "root";
-    private static final String PASSWORD = "Root1234";
+    private static final String PASSWORD = "svvabi181287";
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName(MYSQL_DRIVER);

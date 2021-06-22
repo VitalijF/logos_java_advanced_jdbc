@@ -1,7 +1,7 @@
 package service;
 
-import exception.NoSuchBlogException;
-import model.Blog;
+import exception.DuplicateUserException;
+import exception.NoSuchUserException;
 import model.User;
 
 import java.sql.SQLException;
@@ -9,10 +9,11 @@ import java.util.List;
 
 public interface UserService {
 
-    void createUser(User user);
+    void createUser(User user) throws SQLException, DuplicateUserException;
 
-    User getUserById(int id) throws SQLException, NoSuchBlogException;
+    User getUserById(int id) throws SQLException, NoSuchUserException;
 
-    List<User> getAllUsers();
+    List<User> getAllUsers() throws SQLException;
 
+    boolean isExistsUser(int id) throws SQLException;
 }
