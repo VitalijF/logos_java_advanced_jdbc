@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import model.Blog;
 import model.BlogInput;
 import model.User;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class MySqlBlogDao implements BlogDao{
 
     private static Connection connection;
     private UserDao userDao;
+    public static final  Logger LOGGER = Logger.getLogger(MySqlBlogDao.class);
 
     public MySqlBlogDao(UserDao userDao) {
         this.userDao = userDao;
@@ -38,6 +40,7 @@ public class MySqlBlogDao implements BlogDao{
 
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user_db.blogs");
             ResultSet result = preparedStatement.executeQuery()) {
+            LOGGER.debug(String.format("Getting all blogs from DB, query = %s", preparedStatement));
             while (result.next()) {
                 int userId = result.getInt("user_id");
                 Optional<User> userById = userDao.getUserById(userId);
@@ -46,6 +49,7 @@ public class MySqlBlogDao implements BlogDao{
                         result.getString("name"),
                         userById.orElse(null)));
             }
+            LOGGER.info("Returning all blogs.");
             return blogs;
         }
     }
@@ -59,6 +63,7 @@ public class MySqlBlogDao implements BlogDao{
                 "select * from user_db.blogs where id = ?")) {
 
             preparedStatement.setInt(1, id);
+            LOGGER.debug(String.format("Getting blog with id {%d} from DB, query = %s", id, preparedStatement));
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -66,6 +71,8 @@ public class MySqlBlogDao implements BlogDao{
 
                     int usedId = resultSet.getInt("user_id");
                     User userById = userDao.getUserById(usedId).orElse(null);
+
+                    LOGGER.info(String.format("Blog with id {%d} was found.", id));
 
                     return new Blog(
                             resultSet.getInt("id"),
@@ -75,6 +82,8 @@ public class MySqlBlogDao implements BlogDao{
                 }
             }
         }
+
+        LOGGER.warn(String.format("Can't find blog with id {%d}, return null", id));
 
         return null;
     }
@@ -87,12 +96,15 @@ public class MySqlBlogDao implements BlogDao{
                 "insert into user_db.blogs(id, name, user_id) values (?,?,?)"
         )) {
 
+            LOGGER.debug(String.format("Creating blog {%s}, query = %s", blog, preparedStatement));
+
             preparedStatement.setInt(1, blog.getId());
             preparedStatement.setString(2, blog.getName());
             preparedStatement.setInt(3, blog.getUserId());
 
             preparedStatement.execute();
 
+            LOGGER.info(String.format("Blog {%s} was created.", blog));
         }
 
     }
