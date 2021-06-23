@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import service.UserService;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +19,7 @@ public class BaseUserServiceTest {
 
     private UserDao userDao;
 
-    private BaseUserService baseUserService;
+    private UserService baseUserService;
 
     private static List<User> USERS = initUsers();
 
@@ -69,6 +71,34 @@ public class BaseUserServiceTest {
         Mockito.verify(userDao, Mockito.times(1))
                 .createUser(user);
     }
+
+    @Test
+    void testGetUserById_ReturnNull() {
+
+        Mockito.when(userDao.getUserById(1)).thenReturn(Optional.empty());
+
+        User user = baseUserService.getUserById(1);
+
+        Assertions.assertNull(user);
+
+    }
+
+    @Test
+    void testGetUserById_Successfully() {
+
+        User testUser = USERS.get(0);
+
+        Mockito.when(userDao.getUserById(1)).thenReturn(Optional.of(testUser));
+
+        User user = baseUserService.getUserById(1);
+
+        Assertions.assertNotNull(user);
+        Assertions.assertSame(testUser.getId(), user.getId());
+        Assertions.assertSame(24, user.getAge());
+
+    }
+
+
 
     private static List<User> initUsers() {
         return List.of(
