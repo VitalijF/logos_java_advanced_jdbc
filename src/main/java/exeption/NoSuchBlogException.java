@@ -1,4 +1,4 @@
-package exception;
+package exeption;
 
 public class NoSuchBlogException extends Exception {
 

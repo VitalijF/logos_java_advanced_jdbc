@@ -1,36 +1,36 @@
-import dao.MySqlUserDao;
+import exeption.DuplicateBlogException;
+import exeption.DuplicateUserException;
+import exeption.NoSuchBlogException;
+import exeption.NoSuchUserException;
 import model.Blog;
-import exception.DuplicateBlogException;
-import exception.NoSuchBlogException;
 import model.User;
 import service.BlogService;
 import service.UserService;
-import service.imp.MySqlBlogService;
-import service.imp.BaseUserService;
+import service.impl.MySqlBlogService;
+import service.impl.MySqlUserService;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class Main {
+  private static BlogService blogService = new MySqlBlogService();
+  private static UserService userService = new MySqlUserService();
+  public static void main(String[] args) throws SQLException, NoSuchBlogException, DuplicateBlogException,
+          NoSuchUserException, DuplicateUserException {
 
-    private static BlogService blogService = new MySqlBlogService();
-    private static UserService userService = new BaseUserService(new MySqlUserDao());
+//        System.out.println(" ----------- GET all ---------------- ");
+//        userService.getAll().forEach(System.out::println);
+//
+//        System.out.println(" ------------- GET by ID ----------------");
+//        System.out.println(userService.getUserById(6));
 
-    public static void main(String[] args) throws SQLException, NoSuchBlogException, DuplicateBlogException {
+//        System.out.println(" ---------- CREATE User --------------");
+//        userService.createUser(new User(6, "Sofiia", "Didula", 19));
 
-        User user = new User(
-                2,
-                "Ivan",
-                "Stepanenko",
-                LocalDate.of(1972, 2, 3)
-        );
+    System.out.println(" ---------- CREATE Blog with User --------------");
+    blogService.createBlog(new Blog(7, "Window 8", 7));
 
-        System.out.println("Creating user");
-        userService.createUser(user);
-        System.out.println("Creating user successfully");
+//    System.out.println(" ------------- GET by ID ----------------");
+//    System.out.println(blogService.getBlogById(7));
 
-        User userById = userService.getUserById(user.getId());
-        System.out.println(userById);
-
-    }
+  }
 }

@@ -1,16 +1,17 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Blog {
 
-    private int id;
-    private String name;
-    private User user;
+  private int id;
+  private String name;
+  private int userId;
+
 }
