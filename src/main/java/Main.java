@@ -1,36 +1,50 @@
-import exeption.DuplicateBlogException;
-import exeption.DuplicateUserException;
-import exeption.NoSuchBlogException;
-import exeption.NoSuchUserException;
+import dao.MySqlBlogDao;
+import dao.MySqlUserDao;
 import model.Blog;
+import exception.DuplicateBlogException;
+import exception.NoSuchBlogException;
+import model.BlogInput;
 import model.User;
 import service.BlogService;
 import service.UserService;
-import service.impl.MySqlBlogService;
-import service.impl.MySqlUserService;
+import service.imp.BaseBlogService;
+import service.imp.BaseUserService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Main {
-  private static BlogService blogService = new MySqlBlogService();
-  private static UserService userService = new MySqlUserService();
-  public static void main(String[] args) throws SQLException, NoSuchBlogException, DuplicateBlogException,
-          NoSuchUserException, DuplicateUserException {
 
-//        System.out.println(" ----------- GET all ---------------- ");
-//        userService.getAll().forEach(System.out::println);
+    private static BlogService blogService = new BaseBlogService(new MySqlBlogDao());
+    private static UserService userService = new BaseUserService(new MySqlUserDao());
+
+    public static void main(String[] args) throws SQLException, NoSuchBlogException, DuplicateBlogException {
+
+        BlogInput blog = new BlogInput(
+                3,
+                "Windows11",
+                2
+        );
+//        User user = new User(
+//                2,
+//                "Ivan",
+//                "Stepanenko",
+//                LocalDate.of(1972, 2, 3)
+//        );
+
+        System.out.println("Creating Blog");
+        blogService.createBlog(blog);
+        System.out.println("Creating blog successfully");
+
+        Blog blogById = blogService.getBlogById(blog.getId());
+        System.out.println(blogById);
+
+//        System.out.println("Creating user");
+//        userService.createUser(user);
+//        System.out.println("Creating user successfully");
 //
-//        System.out.println(" ------------- GET by ID ----------------");
-//        System.out.println(userService.getUserById(6));
+//        User userById = userService.getUserById(user.getId());
+//        System.out.println(userById);
 
-//        System.out.println(" ---------- CREATE User --------------");
-//        userService.createUser(new User(6, "Sofiia", "Didula", 19));
-
-    System.out.println(" ---------- CREATE Blog with User --------------");
-    blogService.createBlog(new Blog(7, "Window 8", 7));
-
-//    System.out.println(" ------------- GET by ID ----------------");
-//    System.out.println(blogService.getBlogById(7));
-
-  }
+    }
 }

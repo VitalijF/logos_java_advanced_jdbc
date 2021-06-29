@@ -1,18 +1,18 @@
 package service;
 
-import exeption.DuplicateBlogException;
-import exeption.NoSuchBlogException;
 import model.Blog;
+import exception.DuplicateBlogException;
+import exception.NoSuchBlogException;
+import model.BlogInput;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface BlogService {
 
-  List<Blog> getAll() throws SQLException;
+    List<Blog> getAllBlogs();
 
-  Blog getBlogById(int id) throws SQLException, NoSuchBlogException;
+    Blog getBlogById(int id);
 
-  void createBlog(Blog blog) throws SQLException, NoSuchBlogException, DuplicateBlogException;
-
+    void createBlog(BlogInput blog);
 }
