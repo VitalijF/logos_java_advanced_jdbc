@@ -1,5 +1,7 @@
 package service.imp;
 
+import dao.BlogDao;
+import dao.MySqlBlogDao;
 import dao.MySqlUserDao;
 import jdbc.MySqlConnector;
 import lombok.SneakyThrows;
@@ -14,34 +16,36 @@ import java.util.List;
 
 public class BaseBlogService implements BlogService {
 
-    private static Connection connection;
-    private UserService userService = new BaseUserService(new MySqlUserDao());
+    private BlogDao blogDao;
 
-    static {
-        try {
-            connection = MySqlConnector.getConnection();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public BaseBlogService(BlogDao blogDao) {
+        this.blogDao = blogDao;
     }
 
     @Override
     @SneakyThrows
-    public List<Blog> getAll() {
-       return null;
+    public List<Blog> getAllBlogs() {
+       return blogDao.getAllBlogs();
     }
 
     @Override
     @SneakyThrows
     public Blog getBlogById(int id) {
+        Blog blogById = blogDao.getBlogById(id);
+        if (blogById != null){
+            return blogById;
+        }
         return null;
     }
 
     @Override
     @SneakyThrows
     public void createBlog(BlogInput blog) {
-
+        Blog blogById = blogDao.getBlogById(blog.getId());
+        if(blogById != null){
+            throw new RuntimeException("Already existed blog with such id in DB");
+        }
+        blogDao.createBlog(blog);
     }
 
 }

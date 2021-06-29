@@ -13,9 +13,14 @@ import service.imp.BaseUserService;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface BlogDao {
 
-    List<Blog> getAll();
+    List<Blog> getAllBlogs();
+
+    Blog getBlogById(int id);
+
+    void createBlog(BlogInput blog);
 
 }

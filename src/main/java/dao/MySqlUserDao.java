@@ -26,7 +26,7 @@ public class MySqlUserDao implements UserDao {
     @Override
     @SneakyThrows
     public void createUser(User user) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO web.users (id, first_name, last_name, birth_date) VALUES (?, ?, ?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO web_jdbc.users (id, first_name, last_name, birth_date) VALUES (?, ?, ?, ?)")) {
             statement.setInt(1, user.getId());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
@@ -40,7 +40,7 @@ public class MySqlUserDao implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web.users");
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web_jdbc.users");
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
                 users.add(buildUserFromResultSet(result));
@@ -52,7 +52,7 @@ public class MySqlUserDao implements UserDao {
     @Override
     @SneakyThrows
     public Optional<User> getUserById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web.users WHERE id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM web_jdbc.users WHERE id = ?")) {
             statement.setInt(1, id);
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
