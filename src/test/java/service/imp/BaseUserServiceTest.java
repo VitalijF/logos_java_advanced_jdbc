@@ -41,6 +41,26 @@ public class BaseUserServiceTest {
     }
 
     @Test
+    void testGetUserByIdSuccessful(){
+        User user = USERS.get(1);
+        Mockito.when(userDao.getUserById(2)).thenReturn(Optional.of(user));
+
+        User thisUser = baseUserService.getUserById(2);
+
+        Assertions.assertNotNull(thisUser);
+        Assertions.assertEquals(2, thisUser.getId());
+    }
+
+    @Test
+    void testGetUserByIdFailed(){
+        Mockito.when(userDao.getUserById(2)).thenReturn(Optional.empty());
+
+        User thisUser = baseUserService.getUserById(2);
+
+        Assertions.assertNull(thisUser);
+    }
+
+    @Test
     void testCreateUserExceptionThrow() {
         User user = USERS.get(1);
         Mockito.when(userDao.getUserById(2)).thenReturn(Optional.of(user));

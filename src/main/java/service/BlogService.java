@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BlogService {
 
-    List<Blog> getAll();
+    List<Blog> getAllBlogs();
 
     Blog getBlogById(int id);
 
