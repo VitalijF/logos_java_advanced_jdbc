@@ -14,6 +14,8 @@
         <version.org.junit.jupiter>RELEASE</version.org.junit.jupiter>
         <version.junit.jupiter.params>5.4.2</version.junit.jupiter.params>
         <version.org.mockito>1.10.19</version.org.mockito>
+        <version.log4j>1.2.17</version.log4j>
+        <version.org.junit.jupiter.api>5.8.0-M1</version.org.junit.jupiter.api>
     </properties>
 
     <dependencies>
@@ -51,14 +53,20 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.0-M1</version>
+            <version>${version.org.junit.jupiter.api}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
+            <version>${version.org.mockito}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${version.log4j}</version>
         </dependency>
 
     </dependencies>
